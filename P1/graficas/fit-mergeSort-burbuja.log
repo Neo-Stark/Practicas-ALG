@@ -1,0 +1,126 @@
+
+
+*******************************************************************************
+Sat Mar 10 20:04:35 2018
+
+
+FIT:    data read from 'salidas/Sburbuja.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a0*x*x+a1*x+a2
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a0            a1            a2           
+   0 6.1782158930e+16   0.00e+00  2.50e+07    1.000000e+00   1.000000e+00   1.000000e+00
+  11 4.3502516671e+00  -8.32e-08  2.50e-04    1.532578e-06  -4.199087e-04   4.042125e-01
+
+After 11 iterations the fit converged.
+final sum of squares of residuals : 4.35025
+rel. change during last iteration : -8.32185e-13
+
+degrees of freedom    (FIT_NDF)                        : 30
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.3808
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.145008
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a0              = 1.53258e-06      +/- 9.095e-09    (0.5934%)
+a1              = -0.000419909     +/- 9.21e-05     (21.93%)
+a2              = 0.404212         +/- 0.1952       (48.29%)
+
+correlation matrix of the fit parameters:
+                a0     a1     a2     
+a0              1.000 
+a1             -0.968  1.000 
+a2              0.738 -0.861  1.000 
+
+
+*******************************************************************************
+Sat Mar 10 20:10:23 2018
+
+
+FIT:    data read from 'salidas/SmergeSort.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: g(x)
+	g(x) = n*lgn
+BREAK: Need via and either parameter list or file
+
+*******************************************************************************
+Sat Mar 10 20:11:31 2018
+
+
+FIT:    data read from 'salidas/SmergeSort.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: g(x)
+	g(x) = c0*n*lgn
+fitted parameters initialized with current variable values
+
+
+
+*******************************************************************************
+Sat Mar 10 20:11:41 2018
+
+
+FIT:    data read from 'salidas/SmergeSort.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: g(x)
+	g(x) = c0*n*lg(n)
+fitted parameters initialized with current variable values
+
+
+
+*******************************************************************************
+Sat Mar 10 20:11:53 2018
+
+
+FIT:    data read from 'salidas/SmergeSort.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: g(x)
+	g(x) = c0*x*lg(x)
+fitted parameters initialized with current variable values
+
+
+
+*******************************************************************************
+Sat Mar 10 20:11:59 2018
+
+
+FIT:    data read from 'salidas/SmergeSort.dat'
+        format = z
+        #datapoints = 33
+        residuals are weighted equally (unit weight)
+
+function used for fitting: g(x)
+	g(x) = c0*x*log(x)
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   c0           
+   0 1.3243676734e+13   0.00e+00  6.34e+05    1.000000e+00
+   4 9.2010006489e-01  -1.05e-03  6.34e+01    5.988124e-06
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.9201
+rel. change during last iteration : -1.04929e-08
+
+degrees of freedom    (FIT_NDF)                        : 32
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.169567
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.0287531
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+c0              = 5.98812e-06      +/- 4.659e-08    (0.7781%)

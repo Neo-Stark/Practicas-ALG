@@ -1,47 +1,45 @@
 /**
-   @file Ordenación por mezcla
+   @file Ordenaciï¿½n por mezcla
 */
 
    
 #include <iostream>
-using namespace std;
 #include <ctime>
 #include <cstdlib>
 #include <climits>
 #include <cassert>
+#include <chrono>
+#include <algorithm>
+#include <vector>
+#include <iomanip>
 
+using namespace std;
+using namespace std::chrono;
+    /* ************************************************************ */
+    /*  Mï¿½todo de ordenaciï¿½n por mezcla  */
 
-
-
-
-
-/* ************************************************************ */ 
-/*  Método de ordenación por mezcla  */
-
-/**
-   @brief Ordena un vector por el método de mezcla.
+    /**
+   @brief Ordena un vector por el mï¿½todo de mezcla.
 
    @param T: vector de elementos. Debe tener num_elem elementos.
              Es MODIFICADO.
-   @param num_elem: número de elementos. num_elem > 0.
+   @param num_elem: nï¿½mero de elementos. num_elem > 0.
 
    Cambia el orden de los elementos de T de forma que los dispone
    en sentido creciente de menor a mayor.
    Aplica el algoritmo de mezcla.
 */
-inline static 
-void mergesort(int T[], int num_elem);
-
-
+    inline static void
+    mergesort(int T[], int num_elem);
 
 /**
-   @brief Ordena parte de un vector por el método de mezcla.
+   @brief Ordena parte de un vector por el mï¿½todo de mezcla.
 
-   @param T: vector de elementos. Tiene un número de elementos 
+   @param T: vector de elementos. Tiene un nï¿½mero de elementos 
                    mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
+   @param inicial: Posiciï¿½n que marca el incio de la parte del
                    vector a ordenar.
-   @param final: Posición detrás de la última de la parte del
+   @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
                    vector a ordenar. 
 		   inicial < final.
 
@@ -54,35 +52,35 @@ static void mergesort_lims(int T[], int inicial, int final);
 
 
 /**
-   @brief Ordena un vector por el método de inserción.
+   @brief Ordena un vector por el mï¿½todo de inserciï¿½n.
 
    @param T: vector de elementos. Debe tener num_elem elementos.
              Es MODIFICADO.
-   @param num_elem: número de elementos. num_elem > 0.
+   @param num_elem: nï¿½mero de elementos. num_elem > 0.
 
    Cambia el orden de los elementos de T de forma que los dispone
    en sentido creciente de menor a mayor.
-   Aplica el algoritmo de inserción.
+   Aplica el algoritmo de inserciï¿½n.
 */
 inline static 
 void insercion(int T[], int num_elem);
 
 
 /**
-   @brief Ordena parte de un vector por el método de inserción.
+   @brief Ordena parte de un vector por el mï¿½todo de inserciï¿½n.
 
-   @param T: vector de elementos. Tiene un número de elementos 
+   @param T: vector de elementos. Tiene un nï¿½mero de elementos 
                    mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
+   @param inicial: Posiciï¿½n que marca el incio de la parte del
                    vector a ordenar.
-   @param final: Posición detrás de la última de la parte del
+   @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
                    vector a ordenar. 
 		   inicial < final.
 
    Cambia el orden de los elementos de T entre las posiciones
    inicial y final - 1 de forma que los dispone en sentido creciente
    de menor a mayor.
-   Aplica el algoritmo de la inserción.
+   Aplica el algoritmo de la inserciï¿½n.
 */
 static void insercion_lims(int T[], int inicial, int final);
 
@@ -90,16 +88,16 @@ static void insercion_lims(int T[], int inicial, int final);
 /**
    @brief Mezcla dos vectores ordenados sobre otro.
 
-   @param T: vector de elementos. Tiene un número de elementos 
+   @param T: vector de elementos. Tiene un nï¿½mero de elementos 
                    mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
+   @param inicial: Posiciï¿½n que marca el incio de la parte del
                    vector a escribir.
-   @param final: Posición detrás de la última de la parte del
+   @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
                    vector a escribir
 		   inicial < final.
    @param U: Vector con los elementos ordenados.
    @param V: Vector con los elementos ordenados.
-             El número de elementos de U y V sumados debe coincidir
+             El nï¿½mero de elementos de U y V sumados debe coincidir
              con final - inicial.
 
    En los elementos de T entre las posiciones inicial y final - 1
@@ -111,7 +109,7 @@ static void fusion(int T[], int inicial, int final, int U[], int V[]);
 
 
 /**
-   Implementación de las funciones
+   Implementaciï¿½n de las funciones
 **/
 
 
@@ -196,6 +194,7 @@ static void fusion(int T[], int inicial, int final, int U[], int V[])
 
 int main(int argc, char * argv[])
 {
+  const unsigned GAP = 12;
 
   if (argc != 2)
     {
@@ -214,11 +213,29 @@ int main(int argc, char * argv[])
     {
       T[i] = random();
     }
-      
-  mergesort(T, n);
-  
-  delete [] T;
 
-  return 0;
+    std::vector<duration<double, std::milli>> score(100);
+
+    for (auto &s : score)
+    {
+      auto start = high_resolution_clock::now();
+      mergesort(T, n);
+      auto stop = high_resolution_clock::now();
+
+      s = stop - start;
+    }
+
+    std::nth_element(score.begin(),
+                     score.begin() + score.size() / 2,
+                     score.end());
+
+    std::cout << std::setw(GAP) << n
+              // << std::setw(GAP) << std::fixed << std::setprecision(1)
+              << std::setw(GAP) << score[score.size() / 2].count()
+              << std::endl;
+
+    delete[] T;
+
+    return 0;
 };
  
