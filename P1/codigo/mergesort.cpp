@@ -209,15 +209,15 @@ int main(int argc, char * argv[])
 
   srandom(time(0));
 
-  for (int i = 0; i < n; i++)
-    {
-      T[i] = random();
-    }
 
     std::vector<duration<double, std::milli>> score(100);
 
     for (auto &s : score)
     {
+      for (int i = 0; i < n; i++)
+      {
+        T[i] = random();
+      }
       auto start = high_resolution_clock::now();
       mergesort(T, n);
       auto stop = high_resolution_clock::now();

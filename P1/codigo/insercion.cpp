@@ -16,7 +16,7 @@
 using namespace std;
 using namespace std::chrono;
 
-/* ************************************************************ */ 
+/* ************************************************************ */
 /*  M�todo de ordenaci�n por inserci�n  */
 
 /**
@@ -30,10 +30,7 @@ using namespace std::chrono;
    en sentido creciente de menor a mayor.
    Aplica el algoritmo de inserci�n.
 */
-inline static 
-void insercion(int T[], int num_elem);
-
-
+inline static void insercion(int T[], int num_elem);
 
 /**
    @brief Ordena parte de un vector por el m�todo de inserci�n.
@@ -53,8 +50,6 @@ void insercion(int T[], int num_elem);
 */
 static void insercion_lims(int T[], int inicial, int final);
 
-
-
 /**
    Implementaci�n de las funciones
 **/
@@ -64,17 +59,18 @@ inline static void insercion(int T[], int num_elem)
   insercion_lims(T, 0, num_elem);
 }
 
-
 static void insercion_lims(int T[], int inicial, int final)
 {
   int i, j;
   int aux;
-  for (i = inicial + 1; i < final; i++) {
+  for (i = inicial + 1; i < final; i++)
+  {
     j = i;
-    while ((T[j] < T[j-1]) && (j > 0)) {
+    while ((T[j] < T[j - 1]) && (j > 0))
+    {
       aux = T[j];
-      T[j] = T[j-1];
-      T[j-1] = aux;
+      T[j] = T[j - 1];
+      T[j - 1] = aux;
       j--;
     };
   };
@@ -103,14 +99,14 @@ int main(int argc, char *argv[])
 
   srandom(time(0));
 
-  for (int i = 0; i < n; i++)
-  {
-    T[i] = random();
-  }
   std::vector<duration<double, std::milli>> score(100);
 
   for (auto &s : score)
   {
+    for (int i = 0; i < n; i++)
+    {
+      T[i] = random();
+    }
     auto start = high_resolution_clock::now();
     insercion(T, n);
     auto stop = high_resolution_clock::now();
