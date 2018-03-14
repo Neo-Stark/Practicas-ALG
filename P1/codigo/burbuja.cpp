@@ -86,7 +86,7 @@ static void burbuja_lims(int T[], int inicial, int final)
 int main(int argc, char * argv[])
 {
   const unsigned GAP = 12;
-  ofstream salida("salidas/SburbujaO2.dat", ios::app);
+  ofstream salida("salidas/prueba.dat", ios::app);
   if(!salida)
   {
     cerr << "Error al abrir el fichero de salida";
