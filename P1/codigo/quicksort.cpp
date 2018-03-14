@@ -1,14 +1,17 @@
 /**
-   @file Ordenación rápida (quicksort).
-*/
+  @file Ordenación rápida (quicksort).
+  */
 
-   
+
 #include <iostream>
 using namespace std;
 #include <ctime>
 #include <cstdlib>
 #include <climits>
 #include <cassert>
+
+#include <chrono>
+using namespace std::chrono;
 
 
 
@@ -19,98 +22,98 @@ using namespace std;
 /*  Método de ordenación rápida  */
 
 /**
-   @brief Ordena un vector por el método quicksort.
+  @brief Ordena un vector por el método quicksort.
 
-   @param T: vector de elementos. Debe tener num_elem elementos.
-             Es MODIFICADO.
-   @param num_elem: número de elementos. num_elem > 0.
+  @param T: vector de elementos. Debe tener num_elem elementos.
+  Es MODIFICADO.
+  @param num_elem: número de elementos. num_elem > 0.
 
-   Cambia el orden de los elementos de T de forma que los dispone
-   en sentido creciente de menor a mayor.
-   Aplica el algoritmo quicksort.
-*/
+  Cambia el orden de los elementos de T de forma que los dispone
+  en sentido creciente de menor a mayor.
+  Aplica el algoritmo quicksort.
+  */
 inline static 
 void quicksort(int T[], int num_elem);
 
 
 
 /**
-   @brief Ordena parte de un vector por el método quicksort.
+  @brief Ordena parte de un vector por el método quicksort.
 
-   @param T: vector de elementos. Tiene un número de elementos 
-                   mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
-                   vector a ordenar.
-   @param final: Posición detrás de la última de la parte del
-                   vector a ordenar. 
-		   inicial < final.
+  @param T: vector de elementos. Tiene un número de elementos 
+  mayor o igual a final. Es MODIFICADO.
+  @param inicial: Posición que marca el incio de la parte del
+  vector a ordenar.
+  @param final: Posición detrás de la última de la parte del
+  vector a ordenar. 
+  inicial < final.
 
-   Cambia el orden de los elementos de T entre las posiciones
-   inicial y final - 1 de forma que los dispone en sentido creciente
-   de menor a mayor.
-   Aplica el algoritmo quicksort.
-*/
+  Cambia el orden de los elementos de T entre las posiciones
+  inicial y final - 1 de forma que los dispone en sentido creciente
+  de menor a mayor.
+  Aplica el algoritmo quicksort.
+  */
 static void quicksort_lims(int T[], int inicial, int final);
 
 
 /**
-   @brief Ordena un vector por el método de inserción.
+  @brief Ordena un vector por el método de inserción.
 
-   @param T: vector de elementos. Debe tener num_elem elementos.
-             Es MODIFICADO.
-   @param num_elem: número de elementos. num_elem > 0.
+  @param T: vector de elementos. Debe tener num_elem elementos.
+  Es MODIFICADO.
+  @param num_elem: número de elementos. num_elem > 0.
 
-   Cambia el orden de los elementos de T de forma que los dispone
-   en sentido creciente de menor a mayor.
-   Aplica el algoritmo de inserción.
-*/
+  Cambia el orden de los elementos de T de forma que los dispone
+  en sentido creciente de menor a mayor.
+  Aplica el algoritmo de inserción.
+  */
 inline static 
 void insercion(int T[], int num_elem);
 
 
 /**
-   @brief Ordena parte de un vector por el método de inserción.
+  @brief Ordena parte de un vector por el método de inserción.
 
-   @param T: vector de elementos. Tiene un número de elementos 
-                   mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
-                   vector a ordenar.
-   @param final: Posición detrás de la última de la parte del
-                   vector a ordenar. 
-		   inicial < final.
+  @param T: vector de elementos. Tiene un número de elementos 
+  mayor o igual a final. Es MODIFICADO.
+  @param inicial: Posición que marca el incio de la parte del
+  vector a ordenar.
+  @param final: Posición detrás de la última de la parte del
+  vector a ordenar. 
+  inicial < final.
 
-   Cambia el orden de los elementos de T entre las posiciones
-   inicial y final - 1 de forma que los dispone en sentido creciente
-   de menor a mayor.
-   Aplica el algoritmo de inserción.
-*/
+  Cambia el orden de los elementos de T entre las posiciones
+  inicial y final - 1 de forma que los dispone en sentido creciente
+  de menor a mayor.
+  Aplica el algoritmo de inserción.
+  */
 static void insercion_lims(int T[], int inicial, int final);
 
 
 /**
-   @brief Redistribuye los elementos de un vector según un pivote.
+  @brief Redistribuye los elementos de un vector según un pivote.
 
-   @param T: vector de elementos. Tiene un número de elementos 
-                   mayor o igual a final. Es MODIFICADO.
-   @param inicial: Posición que marca el incio de la parte del
-                   vector a ordenar.
-   @param final: Posición detrás de la última de la parte del
-                   vector a ordenar. 
-		   inicial < final.
-   @param pp: Posición del pivote. Es MODIFICADO.
+  @param T: vector de elementos. Tiene un número de elementos 
+  mayor o igual a final. Es MODIFICADO.
+  @param inicial: Posición que marca el incio de la parte del
+  vector a ordenar.
+  @param final: Posición detrás de la última de la parte del
+  vector a ordenar. 
+  inicial < final.
+  @param pp: Posición del pivote. Es MODIFICADO.
 
-   Selecciona un pivote los elementos de T situados en las posiciones
-   entre inicial y final - 1. Redistribuye los elementos, situando los
-   menores que el pivote a su izquierda, después los iguales y a la
-   derecha los mayores. La posición del pivote se devuelve en pp.
-*/
+  Selecciona un pivote los elementos de T situados en las posiciones
+  entre inicial y final - 1. Redistribuye los elementos, situando los
+  menores que el pivote a su izquierda, después los iguales y a la
+  derecha los mayores. La posición del pivote se devuelve en pp.
+  */
 static void dividir_qs(int T[], int inicial, int final, int & pp);
 
 
 
 /**
-   Implementación de las funciones
-**/
+  Implementación de las funciones
+ **/
 
 
 inline static void insercion(int T[], int num_elem)
@@ -188,12 +191,14 @@ static void dividir_qs(int T[], int inicial, int final, int & pp)
 
 int main(int argc, char * argv[])
 {
-  
-    if (argc != 2)
-    {
-      cerr << "Formato " << argv[0] << " <num_elem>" << endl;
-      return -1;
-    }
+  high_resolution_clock::time_point tantes, tdespues;
+  duration<double> transcurrido;
+
+  if (argc != 2)
+  {
+    cerr << "Formato " << argv[0] << " <num_elem>" << endl;
+    return -1;
+  }
 
   int n = atoi(argv[1]);
 
@@ -203,14 +208,19 @@ int main(int argc, char * argv[])
   srandom(time(0));
 
   for (int i = 0; i < n; i++)
-    {
-      T[i] = random();
-    };
+  {
+    T[i] = random();
+  };
 
+  tantes = high_resolution_clock::now();
   quicksort(T, n);
+  tdespues = high_resolution_clock::now();
 
   delete [] T;
 
+  transcurrido = duration_cast<duration<double>>(tdespues-tantes);
+  cout << transcurrido.count() << endl;
+
   return 0;
 };
- 
+
