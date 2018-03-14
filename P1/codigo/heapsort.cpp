@@ -10,6 +10,9 @@ using namespace std;
 #include <climits>
 #include <cassert>
 
+#include <chrono>
+using namespace std::chrono;
+
 
 
 
@@ -93,6 +96,8 @@ static void reajustar(int T[], int num_elem, int k)
       
 int main(int argc, char * argv[])
 {
+  high_resolution_clock::time_point tantes, tdespues;
+  duration<double> transcurrido;
 
   if (argc != 2)
     {
@@ -112,11 +117,15 @@ int main(int argc, char * argv[])
       T[i] = random();
     };
 
-  // escribe_vector(T, n);
+  
+  tantes = high_resolution_clock::now();
 
   heapsort(T, n);
+  tdespues = high_resolution_clock::now();
 
-  // escribe_vector(T, n);
+  
+  transcurrido = duration_cast<duration<double>>(tdespues-tantes);
+  cout << transcurrido.count() << endl;
 
 
   delete [] T;
