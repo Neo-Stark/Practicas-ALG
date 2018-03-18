@@ -1,32 +1,29 @@
 /**
-  @file Ordenación rápida (quicksort).
+  @file Ordenaciï¿½n rï¿½pida (quicksort).
   */
 
-
 #include <iostream>
-using namespace std;
 #include <ctime>
 #include <cstdlib>
 #include <climits>
 #include <cassert>
-
 #include <chrono>
+#include <algorithm>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
 using namespace std::chrono;
 
-
-
-
-
-
 /* ************************************************************ */ 
-/*  Método de ordenación rápida  */
+/*  Mï¿½todo de ordenaciï¿½n rï¿½pida  */
 
 /**
-  @brief Ordena un vector por el método quicksort.
+  @brief Ordena un vector por el mï¿½todo quicksort.
 
   @param T: vector de elementos. Debe tener num_elem elementos.
   Es MODIFICADO.
-  @param num_elem: número de elementos. num_elem > 0.
+  @param num_elem: nï¿½mero de elementos. num_elem > 0.
 
   Cambia el orden de los elementos de T de forma que los dispone
   en sentido creciente de menor a mayor.
@@ -38,13 +35,13 @@ void quicksort(int T[], int num_elem);
 
 
 /**
-  @brief Ordena parte de un vector por el método quicksort.
+  @brief Ordena parte de un vector por el mï¿½todo quicksort.
 
-  @param T: vector de elementos. Tiene un número de elementos 
+  @param T: vector de elementos. Tiene un nï¿½mero de elementos 
   mayor o igual a final. Es MODIFICADO.
-  @param inicial: Posición que marca el incio de la parte del
+  @param inicial: Posiciï¿½n que marca el incio de la parte del
   vector a ordenar.
-  @param final: Posición detrás de la última de la parte del
+  @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
   vector a ordenar. 
   inicial < final.
 
@@ -57,62 +54,62 @@ static void quicksort_lims(int T[], int inicial, int final);
 
 
 /**
-  @brief Ordena un vector por el método de inserción.
+  @brief Ordena un vector por el mï¿½todo de inserciï¿½n.
 
   @param T: vector de elementos. Debe tener num_elem elementos.
   Es MODIFICADO.
-  @param num_elem: número de elementos. num_elem > 0.
+  @param num_elem: nï¿½mero de elementos. num_elem > 0.
 
   Cambia el orden de los elementos de T de forma que los dispone
   en sentido creciente de menor a mayor.
-  Aplica el algoritmo de inserción.
+  Aplica el algoritmo de inserciï¿½n.
   */
 inline static 
 void insercion(int T[], int num_elem);
 
 
 /**
-  @brief Ordena parte de un vector por el método de inserción.
+  @brief Ordena parte de un vector por el mï¿½todo de inserciï¿½n.
 
-  @param T: vector de elementos. Tiene un número de elementos 
+  @param T: vector de elementos. Tiene un nï¿½mero de elementos 
   mayor o igual a final. Es MODIFICADO.
-  @param inicial: Posición que marca el incio de la parte del
+  @param inicial: Posiciï¿½n que marca el incio de la parte del
   vector a ordenar.
-  @param final: Posición detrás de la última de la parte del
+  @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
   vector a ordenar. 
   inicial < final.
 
   Cambia el orden de los elementos de T entre las posiciones
   inicial y final - 1 de forma que los dispone en sentido creciente
   de menor a mayor.
-  Aplica el algoritmo de inserción.
+  Aplica el algoritmo de inserciï¿½n.
   */
 static void insercion_lims(int T[], int inicial, int final);
 
 
 /**
-  @brief Redistribuye los elementos de un vector según un pivote.
+  @brief Redistribuye los elementos de un vector segï¿½n un pivote.
 
-  @param T: vector de elementos. Tiene un número de elementos 
+  @param T: vector de elementos. Tiene un nï¿½mero de elementos 
   mayor o igual a final. Es MODIFICADO.
-  @param inicial: Posición que marca el incio de la parte del
+  @param inicial: Posiciï¿½n que marca el incio de la parte del
   vector a ordenar.
-  @param final: Posición detrás de la última de la parte del
+  @param final: Posiciï¿½n detrï¿½s de la ï¿½ltima de la parte del
   vector a ordenar. 
   inicial < final.
-  @param pp: Posición del pivote. Es MODIFICADO.
+  @param pp: Posiciï¿½n del pivote. Es MODIFICADO.
 
   Selecciona un pivote los elementos de T situados en las posiciones
   entre inicial y final - 1. Redistribuye los elementos, situando los
-  menores que el pivote a su izquierda, después los iguales y a la
-  derecha los mayores. La posición del pivote se devuelve en pp.
+  menores que el pivote a su izquierda, despuï¿½s los iguales y a la
+  derecha los mayores. La posiciï¿½n del pivote se devuelve en pp.
   */
 static void dividir_qs(int T[], int inicial, int final, int & pp);
 
 
 
 /**
-  Implementación de las funciones
+  Implementaciï¿½n de las funciones
  **/
 
 
@@ -193,6 +190,7 @@ int main(int argc, char * argv[])
 {
   high_resolution_clock::time_point tantes, tdespues;
   duration<double> transcurrido;
+  int GAP = 12;
 
   if (argc != 2)
   {
@@ -207,20 +205,31 @@ int main(int argc, char * argv[])
 
   srandom(time(0));
 
-  for (int i = 0; i < n; i++)
+  std::vector<duration<double, std::milli>> score(100);
+
+  for (auto &s : score)
   {
-    T[i] = random();
-  };
+    for (int i = 0; i < n; i++)
+    {
+      T[i] = random();
+    }
+    auto start = high_resolution_clock::now();
+    quicksort(T, n);
+    auto stop = high_resolution_clock::now();
 
-  tantes = high_resolution_clock::now();
-  quicksort(T, n);
-  tdespues = high_resolution_clock::now();
+    s = stop - start;
+  }
 
-  delete [] T;
+  std::nth_element(score.begin(),
+                   score.begin() + score.size() / 2,
+                   score.end());
 
-  transcurrido = duration_cast<duration<double>>(tdespues-tantes);
-  cout << transcurrido.count() << endl;
+  std::cout << std::setw(GAP) << n
+            // << std::setw(GAP) << std::fixed << std::setprecision(1)
+            << std::setw(GAP) << score[score.size() / 2].count()
+            << std::endl;
+
+  delete[] T;
 
   return 0;
 };
-
