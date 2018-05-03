@@ -6,7 +6,7 @@ echo "a280\n" >> distancias.dat
 echo "a280\n" >> tiempos.dat
 for((i=1;i<4;i=i+1))
 do
-   /usr/bin/time -f %e -a -o tiempos.dat ./viajante$i datosTSP/a280.tsp >> distancias.dat
+   /usr/bin/time -f " viajante$i \t%e" -a -o tiempos.dat ./viajante$i datosTSP/a280.tsp >> distancias.dat
    mv salida.tsp salidas/viajante$i-a280.tsp
 done
 
