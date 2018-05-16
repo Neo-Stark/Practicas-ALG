@@ -3,6 +3,13 @@
 
 using namespace std;
 
+struct movimiento{
+  int x,y,dir;
+  movimiento(int _x, int _y, int _dir):x(_x), y(_y), dir(_dir){}
+  movimiento():x(0), y(0), dir(0){}
+};
+
+
 //0->arriba, 1->derecha, 2->abajo, 3->izquierda
 bool movimientoLegal(const vector<vector<char> > &tab, int x, int y, int dir){
   if(tab[x][y]!='o')
@@ -39,6 +46,23 @@ void hacerMovimiento(vector<vector<char> > &tab, int x, int y, int dir){
   }
 }
 
+
+
+vector<movimiento> expandir(const vector<vector<char>> &tab){
+  vector<movimiento> res;
+  for(int i = 0; i < tab.size(); ++i)
+    for(int j = 0; j < tab[i].size(); ++j)
+      if(tab[i][j] == 'o')
+        for(int k = 0; k < 4; ++k)
+          if(movimientoLegal(tab, i , j , k)){
+            movimiento tmp(i, j, k);
+            res.push_back(tmp);
+          }
+        
+  return res;
+}
+
+
 bool esSolucion(const vector<vector<char> > &tab){
   int fichas = 0;
   for(int i = 0; i < 7; ++i)
@@ -58,7 +82,29 @@ void muestraTablero(const vector<vector<char> > &tab) {
   }
 }
 
+
+bool encontrarSolucion(vector<vector<char>> &tab, vector<movimiento> &solucion){
+  vector<movimiento> hijos = expandir(tab);
+  vector<vector<char>> tmp;
+  bool sol = false;
+
+  if(hijos.size() == 0)
+    return esSolucion(tab);
+
+  for(auto it = hijos.begin(); it != hijos.end() && !sol; ++it){
+    tmp = tab;
+    hacerMovimiento(tmp, it->x, it->y, it->dir);
+    sol = encontrarSolucion(tmp, solucion);
+    if(sol){
+      solucion.push_back(*it);
+      return sol;
+    }
+  }
+  return sol;
+}
+
 int main(){
+  vector<movimiento> solucion;
   vector<vector<char> > tablero = {
     {'X','X','o','o','o','X','X'},
     {'X','X','o','o','o','X','X'},
@@ -70,9 +116,11 @@ int main(){
   };
 
   muestraTablero(tablero);
+  encontrarSolucion(tablero, solucion);
 
-  cout << movimientoLegal(tablero, 1, 3, 2) << endl;
-  hacerMovimiento(tablero, 1, 3, 2);
-  muestraTablero(tablero);
+  cout << "Solucion: " << endl; 
+  for(auto it = solucion.begin(); it != solucion.end(); ++it)
+    cout << it->x << " " << it->y << " " << it->dir << endl;
+
 
 }
