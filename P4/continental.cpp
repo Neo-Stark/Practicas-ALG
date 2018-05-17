@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <set>
+#include <thread>
 
 using namespace std;
 
@@ -25,13 +27,13 @@ bool movimientoLegal(const vector<vector<char> > &tab, int x, int y, int dir){
     return false;
 
   if(dir == 0)
-    return (y > 1 && x > 2 && tab[x-1][y] == 'o' && tab[x-2][y] == '-');
+    return (x > 2 && tab[x-1][y] == 'o' && tab[x-2][y] == '-');
   else if(dir == 1)
-    return (x < 5 && y < 5 && tab[x][y+1] == 'o' && tab[x][y+2] == '-');
+    return (y < 5 && tab[x][y+1] == 'o' && tab[x][y+2] == '-');
   else if(dir == 2)
-    return (y < 5 && x < 5 && tab[x+1][y] == 'o' && tab[x+2][y] == '-');
+    return (x < 5 && tab[x+1][y] == 'o' && tab[x+2][y] == '-');
   else if(dir == 3)
-    return (x > 1 && y > 2 &&tab[x][y-1] == 'o' && tab[x][y-2] == '-');
+    return (y > 2 && tab[x][y-1] == 'o' && tab[x][y-2] == '-');
 
   cout << "Hay un problema gordo si salta este mensaje" << endl;
   return false;
@@ -70,9 +72,6 @@ vector<movimiento> expandir(const vector<vector<char>> &tab){
             res.push_back(tmp);
           }
 
-  for (auto it = res.begin(); it != res.end(); ++it)
-    cout << "x: " << it->x << "\ty: " << it->y << "\tdir: " << it->dir << endl;
-
   return res;
 }
 
@@ -93,10 +92,10 @@ void muestraTablero(const vector<vector<char> > &tab) {
       cout << elemento << " ";
     cout << endl;
   }
+  cout << endl;
 }
 
-string prueba;
-bool guardado = false;
+set<string> estados;
 
 bool encontrarSolucion(vector<vector<char>> &tab, vector<movimiento> &solucion){
   vector<movimiento> hijos = expandir(tab);
@@ -104,22 +103,19 @@ bool encontrarSolucion(vector<vector<char>> &tab, vector<movimiento> &solucion){
   bool sol = false;
 
   if(hijos.size() == 0) {
-    if (!guardado) {
-      prueba = matrixToString(tab);
-      guardado = true;
-    }
-    else if (guardado && matrixToString(tab) == prueba) {}
-      //cout << "REPETIDO" << endl;
-    //muestraTablero(tab);
     return esSolucion(tab);
   }
 
   for(auto it = hijos.begin(); it != hijos.end(); ++it){
     tmp = tab;
     hacerMovimiento(tmp, it->x, it->y, it->dir);
-    if(encontrarSolucion(tmp, solucion)){
-      solucion.push_back(*it);
-      return sol;
+    if(estados.find(matrixToString(tmp)) == estados.end()){
+      estados.insert(matrixToString(tmp));
+      if(encontrarSolucion(tmp, solucion)){
+        sol = true;
+        solucion.push_back(*it);
+        return sol;
+      }
     }
   }
   return sol;
@@ -137,27 +133,19 @@ int main(){
     {'X','X','o','o','o','X','X'}
   };
 
-vector<vector<char> > sol = {
-    {'X','X','-','-','-','X','X'},
-    {'X','X','-','-','-','X','X'},
-    {'-','-','-','-','-','-','-'},
-    {'-','-','-','o','-','-','-'},
-    {'-','-','-','-','-','-','-'},
-    {'X','X','-','-','-','X','X'},
-    {'X','X','-','-','-','X','X'}
-  };
-
-
-  cout << matrixToString(tablero) << endl;
-
   muestraTablero(tablero);
-  //encontrarSolucion(tablero, solucion);
+  encontrarSolucion(tablero, solucion);
   
-  expandir(tablero);
 
-  cout << "Solucion: " << endl; 
-  for(auto it = solucion.begin(); it != solucion.end(); ++it)
+  cout << "Solucion: " << endl;
+  for(auto it = solucion.rbegin(); it != solucion.rend(); ++it)
     cout << it->x << " " << it->y << " " << it->dir << endl;
 
-
+  cout << "Tablero solucion " << endl;
+  for(auto it = solucion.rbegin(); it != solucion.rend(); ++it){
+    hacerMovimiento(tablero, it->x, it->y, it->dir);
+    this_thread::sleep_for(chrono::milliseconds(100));
+    system("clear");
+    muestraTablero(tablero);
+  }
 }
