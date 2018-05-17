@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -124,28 +125,38 @@ bool encontrarSolucion(vector<vector<char>> &tab, vector<movimiento> &solucion){
 int main(){
   vector<movimiento> solucion;
   vector<vector<char> > tablero = {
-    {'X','X','o','o','o','X','X'},
-    {'X','X','o','o','o','X','X'},
+    {' ',' ','o','o','o',' ',' '},
+    {' ',' ','o','o','o',' ',' '},
     {'o','o','o','o','o','o','o'},
     {'o','o','o','-','o','o','o'},
     {'o','o','o','o','o','o','o'},
-    {'X','X','o','o','o','X','X'},
-    {'X','X','o','o','o','X','X'}
+    {' ',' ','o','o','o',' ',' '},
+    {' ',' ','o','o','o',' ',' '}
   };
 
+  system("clear");
   muestraTablero(tablero);
+  this_thread::sleep_for(chrono::milliseconds(300));
+  auto start = chrono::high_resolution_clock::now();
   encontrarSolucion(tablero, solucion);
+  auto diff = chrono::high_resolution_clock::now() - start;
+  auto t1 = chrono::duration_cast<chrono::duration<double>>(diff);
   
 
+  /*
   cout << "Solucion: " << endl;
   for(auto it = solucion.rbegin(); it != solucion.rend(); ++it)
     cout << it->x << " " << it->y << " " << it->dir << endl;
+    */
 
-  cout << "Tablero solucion " << endl;
+  //cout << "Tablero solucion " << endl;
   for(auto it = solucion.rbegin(); it != solucion.rend(); ++it){
     hacerMovimiento(tablero, it->x, it->y, it->dir);
     this_thread::sleep_for(chrono::milliseconds(100));
     system("clear");
     muestraTablero(tablero);
   }
+
+  cout << "Movimientos: " << solucion.size() << endl;
+  cout << "Tiempo: " << t1.count() << endl;
 }
