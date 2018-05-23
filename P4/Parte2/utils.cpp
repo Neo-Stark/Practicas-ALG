@@ -5,6 +5,7 @@
 #include <map>
 #include <queue>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -38,12 +39,13 @@ vector<int> recorridoInicial(map<int, pair<double, double>> &M) {
   int norte = 1, este, oeste;
   este = norte;
   oeste = norte;
+  stack<int> pila_norte;
   double maxnorte = M[1].second, maxeste = M[1].first, maxoeste = M[1].first;
   vector<int> resultado;
   for (auto it = M.begin(); it != M.end(); ++it) {
     if (it->second.second > maxnorte) {
       maxnorte = it->second.second;
-      norte = it->first;
+      pila_norte.push(it->first);
     }
 
     if (it->second.first > maxeste) {
@@ -51,15 +53,17 @@ vector<int> recorridoInicial(map<int, pair<double, double>> &M) {
       este = it->first;
     }
 
-    if (it->second.first < maxoeste) {
+    else if (it->second.first < maxoeste) {
       maxoeste = it->second.first;
       oeste = it->first;
     }
   }
 
-  if (norte == este || este == oeste || norte == oeste) {
+  norte = pila_norte.top();
+  pila_norte.pop();
+  if (norte == este || norte == oeste) {
     cout << "GRAN PROBLEMO" << endl;
-    exit(-1);
+    norte = pila_norte.top();
   }
 
   resultado.push_back(norte);
