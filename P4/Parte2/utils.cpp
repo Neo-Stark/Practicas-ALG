@@ -216,33 +216,30 @@ void ByB(vector<int> &sol, const vector<vector<double>> &matriz_dist,
   queue<vector<int>> C;
   sol.push_back(1);
   vector<vector<int>> hijos;
-  bool encontrado = false;
+
   int CG = greedy(M);
   cout << "Greedy " << CG << endl;
   for (auto i : matriz_dist) {
     for (auto j : i) cout << j << "\t";
     cout << endl;
   }
+
   C.push(sol);
   do {
     sol = C.front();
-    // cout << sol.size() << endl;
     C.pop();
 
     hijos = generarHijos(sol, M);
 
-    for (auto it = hijos.begin(); it != hijos.end() /*and !encontrado */; ++it) {
-      if (optimista(*it, M) < CG) {  // ES FACTIBLE
-        if (esSolucion(*it, M)) {
-          sol = *it;
+    for (auto it : hijos) {
+      if (optimista(it, M) < CG) {  // ES FACTIBLE
+        if (esSolucion(it, M)) {
+          sol = it;
           CG = distanciaCompleta(sol, matriz_dist);
-          encontrado = true;
         } else
-          C.push(*it);
+          C.push(it);
       }
     }
-    // cout << C.size() << endl;
-    // cout << encontrado << endl;
-  } while (!C.empty() /* && !encontrado */);
+  } while (!C.empty());
   sol.push_back(1);
 }
