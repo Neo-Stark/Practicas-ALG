@@ -36,7 +36,7 @@ int leerFichero(string &nombre, map<int, pair<double, double> > &M){
 
 
 // Calcula el recorrida inicial, es decir, el triángulo de ciudades mencionado en el guión
-vector<int> recorridoInicial(map<int, pair<double, double> > &M){
+vector<int> recorridoInicial(map<int,pair<double,double>> &M){
   int norte = 1, este, oeste;
   este = norte;
   oeste = norte;
@@ -160,8 +160,36 @@ void calculaMejoresCiudades(vector<int> &cerrados, const vector<vector<double> >
 
 
 // Calcula un recorrido greedy 
-void greedy(vector<int> &sol, const vector<int> &matriz_dist) {
-  rec_inicial = recorridoInicial(M);
-  sol = rec_inicial;
-  calculaMejoresCiudades(sol, matriz_dist, M);
+int greedy(map<int,pair<double,double>> &M) {
+  vector<int> rec_inicial = recorridoInicial(M);
+  vector<int> solucion = rec_inicial;
+  vector<vector<double>> matriz_dist = matrizDistancias(M);
+  calculaMejoresCiudades(solucion, matriz_dist, M);
+  return distanciaCompleta(solucion, matriz_dist);
+}
+
+
+// Calcula la distancia minima de una ciudad
+int distanciaMinima(int ciudad, const vector<vector<double>> &matriz_dist) {
+  int min = 10000000;
+  int temp;
+  for (int i = 1; i < matriz_dist.size(); ++i) {
+    temp = matriz_dist[i][ciudad];
+    if (temp < min && temp != 0)
+      min = temp;
+  }
+
+  return min;
+}
+
+
+// Calcula el recorrido más optimista
+int optimista(const vector<int> &sol, map<int, pair<double, double> > &M) {
+  vector<int> sin_recorrer = complementario(sol, M);
+  vector<vector<double>> matriz_dist = matrizDistancias(M);
+  int min;
+  for (auto it = sin_recorrer.begin(); it != sin_recorrer.end(); ++it)
+    min += distanciaMinima(*it, matriz_dist);
+  
+  return distanciaCompleta(sol, matriz_dist) + min;
 }
