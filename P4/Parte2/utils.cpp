@@ -193,3 +193,30 @@ int optimista(const vector<int> &sol, map<int, pair<double, double> > &M) {
   
   return distanciaCompleta(sol, matriz_dist) + min;
 }
+
+
+void ByB (vector<int> &sol, const vector<vector<double>> &matriz_dist, map<int,pair<double,double>> &M) {
+  queue<vector<int>> C;
+  sol.push_back(1);
+  vector<vector<int>> hijos;
+  bool encontrado = false;
+  int CG = greedy(M);
+
+  C.push(sol);
+  do {
+    sol = C.top();
+    C.pop();
+
+    hijos = generaHijos(sol);
+
+    for(auto it = hijos.begin() ; it != hijos.end() ; ++it) {
+      if(optimista(*it) < CG) { // ES FACTIBLE
+        if(esSolucion(*it)) {
+          sol = *it;
+          encontrado = true;
+        }
+        else C.push(*it);
+      }
+    }
+  } while( !C.empty() && !encontrado);
+}
