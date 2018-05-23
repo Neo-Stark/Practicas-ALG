@@ -208,3 +208,10 @@ vector<vector<int>> generarHijos(const vector<int> &sol, map<int, pair<double, d
 
   return resultado;
 }
+
+
+// Devuelve si es una solucion valida
+bool esSolucion(const vector<int> &sol, map<int, pair<double,double>> &M) {
+  vector <int> comp = complementario(sol, M);
+  return comp.size() == 0;
+}
