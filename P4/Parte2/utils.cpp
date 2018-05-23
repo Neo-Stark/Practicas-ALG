@@ -194,7 +194,6 @@ int optimista(const vector<int> &sol, map<int, pair<double, double> > &M) {
   return distanciaCompleta(sol, matriz_dist) + min;
 }
 
-
 void ByB (vector<int> &sol, const vector<vector<double>> &matriz_dist, map<int,pair<double,double>> &M) {
   queue<vector<int>> C;
   sol.push_back(1);
@@ -220,3 +219,25 @@ void ByB (vector<int> &sol, const vector<vector<double>> &matriz_dist, map<int,p
     }
   } while( !C.empty() && !encontrado);
 }
+
+// Calcula hijos
+vector<vector<int>> generarHijos(const vector<int> &sol, map<int, pair<double, double> > &M) {
+  vector<int> comp = complementario(sol, M);
+  vector<int> padre;
+  vector<vector<int>> resultado;
+  for (auto ciudad : comp) {
+    padre = sol;
+    padre.push_back(ciudad);
+    resultado.push_back(padre);
+  }
+
+  return resultado;
+}
+
+
+// Devuelve si es una solucion valida
+bool esSolucion(const vector<int> &sol, map<int, pair<double,double>> &M) {
+  vector <int> comp = complementario(sol, M);
+  return comp.size() == 0;
+}
+
