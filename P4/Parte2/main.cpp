@@ -7,9 +7,10 @@ int main(int argc, char *argv[]){
 		cout << "Formato incorrecto" << endl;
 		exit(-1);
 	}
-  vector<vector<double>> matriz_dist = matrizDistancias(M);
 	string s = argv[1];
+
 	int n = leerFichero(s, M);
+  vector<vector<double>> matriz_dist = matrizDistancias(M);
 
   ByB(sol, matriz_dist, M);
 	ofstream output("salida.tsp");
@@ -21,8 +22,8 @@ int main(int argc, char *argv[]){
 		output << i << " " << M[i].first << " " << M[i].second << endl; 		
 	}
 
-
-	cout << "Distancia(Viajante1) " << distanciaCompleta(sol, matriz_dist) << endl;
+  cout << "Distancia " << sol.size() << endl;
+	cout << "Distancia(ByB) " << distanciaCompleta(sol, matriz_dist) << endl;
 
 	return 0;
 	
