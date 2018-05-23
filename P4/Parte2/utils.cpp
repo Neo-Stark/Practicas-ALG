@@ -193,3 +193,18 @@ int optimista(const vector<int> &sol, map<int, pair<double, double> > &M) {
   
   return distanciaCompleta(sol, matriz_dist) + min;
 }
+
+
+// Calcula hijos
+vector<vector<int>> generarHijos(const vector<int> &sol, map<int, pair<double, double> > &M) {
+  vector<int> comp = complementario(sol, M);
+  vector<int> padre;
+  vector<vector<int>> resultado;
+  for (auto ciudad : comp) {
+    padre = sol;
+    padre.push_back(ciudad);
+    resultado.push_back(padre);
+  }
+
+  return resultado;
+}
