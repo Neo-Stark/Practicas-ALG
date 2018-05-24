@@ -172,14 +172,36 @@ int greedy(map<int, pair<double, double>> &M) {
 
 // Calcula la distancia minima de una ciudad
 int distanciaMinima(int ciudad, const vector<vector<double>> &matriz_dist) {
-  int min = 10000000;
+  int min = 100000;
   int temp;
   for (int i = 1; i < matriz_dist.size(); ++i) {
     temp = matriz_dist[i][ciudad];
-    if (temp < min && temp != 0) min = temp;
+    if (temp < min && temp != 0) {
+      min = temp;
+    }
   }
 
   return min;
+}
+int distanciaMinima_V2(int ciudad, const vector<vector<double>> &matriz_dist) {
+  int min1 = 100000, min2 = 10000000;
+  int temp;
+  int i_minima;
+  for (int i = 1; i < matriz_dist.size(); ++i) {
+    temp = matriz_dist[i][ciudad];
+    if (temp < min1 && temp != 0) {
+      min1 = temp;
+      i_minima = i;
+    }
+  }
+  for (int i = 1; i < matriz_dist.size(); ++i) {
+    temp = matriz_dist[i][ciudad];
+    if (temp < min2 && temp != 0 && i != i_minima) {
+      min2 = temp;
+    }
+  }
+
+  return min1 + min2;
 }
 
 // Calcula el recorrido más optimista
@@ -188,9 +210,10 @@ int optimista(const vector<int> &sol, map<int, pair<double, double>> &M) {
   vector<vector<double>> matriz_dist = matrizDistancias(M);
   int min = 0;
   for (auto it = sin_recorrer.begin(); it != sin_recorrer.end(); ++it)
-    min += distanciaMinima(*it, matriz_dist);
+    min += distanciaMinima_V2(*it, matriz_dist);
 
-  // cout << "Minimo " << min << endl;
+  // Version 2
+  min /= 2;
   return distanciaCompleta(sol, matriz_dist) + min;
 }
 
@@ -268,7 +291,9 @@ void ByB(vector<int> &sol, const vector<vector<double>> &matriz_dist,
 
 void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
             map<int, pair<double, double>> &M) {
-  priority_queue<pair<int, vector<int>>> colaP;
+  priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>,
+                 greater<pair<int, vector<int>>>>
+      colaP;
   sol.push_back(1);
   int CL = optimista(sol, M);
   pair<int, vector<int>> par_sol;
@@ -276,24 +301,40 @@ void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
   par_sol.second = sol;
   vector<pair<int, vector<int>>> hijos;
   int CG = greedy(M);
+  CG += 100;
+  cout << CG << endl;
   colaP.push(par_sol);
+
+  // Resultados complejidad
+  int size_max = 0;
+  int nodos_expandidos = 0;
+  int poda = 0;
 
   do {
     par_sol = colaP.top();
     colaP.pop();
 
     hijos = generarHijos_V2(par_sol.second, M);
+    nodos_expandidos += hijos.size();
 
     for (auto it : hijos) {
-      if (it.first < CG) {
+      if (it.first <= CG) {
         if (esSolucion(it.second, M)) {
           sol = it.second;
           CG = distanciaCompleta(sol, matriz_dist);
         } else
           colaP.push(it);
-      }
+      } else
+        poda++;
     }
-
+    if (size_max < colaP.size()) size_max = colaP.size();
+    // while (!colaP.empty()) {
+    //   std::cout << ' ' << colaP.top().first;
+    //   colaP.pop();
+    // }
   } while (!colaP.empty());
   sol.push_back(1);
+  cout << "Size max cola:\t" << size_max << endl
+       << "Nodos expandidos:\t" << nodos_expandidos << endl
+       << "Podas realizadas:\t" << poda << endl;
 }
