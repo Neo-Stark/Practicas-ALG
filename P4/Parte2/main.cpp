@@ -22,7 +22,9 @@ int main(int argc, char *argv[]){
 		output << i << " " << M[i].first << " " << M[i].second << endl; 		
 	}
 
-  cout << "Distancia " << sol.size() << endl;
+  for (int i : sol)
+  cout << i << endl;
+  cout << "Ciudades: " << sol.size() << endl;
 	cout << "Distancia(ByB) " << distanciaCompleta(sol, matriz_dist) << endl;
 
 	return 0;

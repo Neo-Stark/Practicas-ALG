@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.aiml": "xml",
+    "array": "cpp",
+    "deque": "cpp",
+    "unordered_map": "cpp",
+    "vector": "cpp",
+    "slist": "cpp",
+    "initializer_list": "cpp"
+  }
+}

@@ -208,6 +208,24 @@ vector<vector<int>> generarHijos(const vector<int> &sol,
 
   return resultado;
 }
+vector<pair<int, vector<int>>> generarHijos_V2(
+    const vector<int> &sol, map<int, pair<double, double>> &M) {
+  vector<int> comp = complementario(sol, M);
+  vector<int> padre;
+  vector<pair<int, vector<int>>> resultado;
+  int cota;
+  pair<int, vector<int>> par;
+  for (auto ciudad : comp) {
+    padre = sol;
+    padre.push_back(ciudad);
+    cota = optimista(padre, M);
+    par.first = cota;
+    par.second = padre;
+    resultado.push_back(par);
+  }
+
+  return resultado;
+}
 
 // Devuelve si es una solucion valida
 bool esSolucion(const vector<int> &sol, map<int, pair<double, double>> &M) {
@@ -245,5 +263,37 @@ void ByB(vector<int> &sol, const vector<vector<double>> &matriz_dist,
       }
     }
   } while (!C.empty());
+  sol.push_back(1);
+}
+
+void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
+            map<int, pair<double, double>> &M) {
+  priority_queue<pair<int, vector<int>>> colaP;
+  sol.push_back(1);
+  int CL = optimista(sol, M);
+  pair<int, vector<int>> par_sol;
+  par_sol.first = CL;
+  par_sol.second = sol;
+  vector<pair<int, vector<int>>> hijos;
+  int CG = greedy(M);
+  colaP.push(par_sol);
+
+  do {
+    par_sol = colaP.top();
+    colaP.pop();
+
+    hijos = generarHijos_V2(par_sol.second, M);
+
+    for (auto it : hijos) {
+      if (it.first < CG) {
+        if (esSolucion(it.second, M)) {
+          sol = it.second;
+          CG = distanciaCompleta(sol, matriz_dist);
+        } else
+          colaP.push(it);
+      }
+    }
+
+  } while (!colaP.empty());
   sol.push_back(1);
 }
