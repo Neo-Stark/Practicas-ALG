@@ -256,40 +256,8 @@ bool esSolucion(const vector<int> &sol, map<int, pair<double, double>> &M) {
   return comp.size() == 0;
 }
 
+
 void ByB(vector<int> &sol, const vector<vector<double>> &matriz_dist,
-         map<int, pair<double, double>> &M) {
-  queue<vector<int>> C;
-  sol.push_back(1);
-  vector<vector<int>> hijos;
-
-  int CG = greedy(M);
-  cout << "Greedy " << CG << endl;
-  for (auto i : matriz_dist) {
-    for (auto j : i) cout << j << "\t";
-    cout << endl;
-  }
-
-  C.push(sol);
-  do {
-    sol = C.front();
-    C.pop();
-
-    hijos = generarHijos(sol, M);
-
-    for (auto it : hijos) {
-      if (optimista(it, M) < CG) {  // ES FACTIBLE
-        if (esSolucion(it, M)) {
-          sol = it;
-          CG = distanciaCompleta(sol, matriz_dist);
-        } else
-          C.push(it);
-      }
-    }
-  } while (!C.empty());
-  sol.push_back(1);
-}
-
-void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
             map<int, pair<double, double>> &M) {
   priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>,
                  greater<pair<int, vector<int>>>>
@@ -338,3 +306,41 @@ void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
        << "Nodos expandidos:\t" << nodos_expandidos << endl
        << "Podas realizadas:\t" << poda << endl;
 }
+
+
+
+class solucionBacktracking{
+private:
+    vector<int> sol;
+    int CG;
+    map<int, pair<double, double> > M;
+    vector<vector<double>> matriz_dist;
+public:
+
+    solucionBacktracking(const map<int, pair<double, double> > & _M){
+        M = _M;
+        CG = greedy(M);
+        matriz_dist= matrizDistancias(M);
+    }
+
+    vector<int> getSolucion(){return sol;}
+
+
+    void solucion(vector<int> estado){
+        if(esSolucion(estado, M) ){
+            if((distanciaCompleta(estado, matriz_dist) < CG)){
+                CG = distanciaCompleta(estado, matriz_dist);
+                sol = estado;
+            }
+        }
+        else{
+            vector<vector<int> >hijos = generarHijos(estado,M);
+
+            for(auto hijo : hijos){
+                if(optimista(hijo, M) <= CG){     //hijo es estado valido
+                    solucion(hijo);
+                }
+            }
+        }
+    }    
+};
