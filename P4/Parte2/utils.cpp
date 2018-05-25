@@ -204,6 +204,21 @@ int distanciaMinima_V2(int ciudad, const vector<vector<double>> &matriz_dist) {
   return min1 + min2;
 }
 
+int distanciaSegunda(map<int, pair<double, double>> &M, int i) {
+  int first = 100000, second = 100000;
+  vector<vector<double>> adj = matrizDistancias(M);
+  for (int j = 1; j < adj.size(); j++) {
+    if (i == j) continue;
+
+    if (adj[i][j] <= first) {
+      second = first;
+      first = adj[i][j];
+    } else if (adj[i][j] <= second && adj[i][j] != first)
+      second = adj[i][j];
+  }
+  return second;
+}
+
 // Calcula el recorrido más optimista
 int optimista(const vector<int> &sol, map<int, pair<double, double>> &M) {
   vector<int> sin_recorrer = complementario(sol, M);
@@ -301,7 +316,7 @@ void ByB_V2(vector<int> &sol, const vector<vector<double>> &matriz_dist,
   par_sol.second = sol;
   vector<pair<int, vector<int>>> hijos;
   int CG = greedy(M);
-  CG += 100;
+  // CG += 100;
   cout << CG << endl;
   colaP.push(par_sol);
 
