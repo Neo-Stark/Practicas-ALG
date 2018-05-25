@@ -1,5 +1,5 @@
 #include <chrono>
-#include <utils.cpp>
+#include "utils.cpp"
 using namespace std::chrono;
 
 int main(int argc, char *argv[]) {
@@ -16,7 +16,19 @@ int main(int argc, char *argv[]) {
 
   duration<double, std::milli> tiempo;
   auto start = high_resolution_clock::now();
-  ByB_V2(sol, matriz_dist, M);
+  
+  /*
+  //solucion backtracking
+  vector<int> tmp;
+  tmp.push_back(1);
+  solucionBacktracking back(M);
+  back.solucion(tmp);
+  sol = back.getSolucion();
+  */
+  
+  //solucion branch and bound
+  ByB(sol, matriz_dist, M);
+  
   auto stop = high_resolution_clock::now();
 
   tiempo = stop - start;
